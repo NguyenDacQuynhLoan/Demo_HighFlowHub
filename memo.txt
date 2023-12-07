@@ -1,0 +1,10 @@
+NetProject
+- Sharing Base Repo , Service , Entity, Model, Config ( Generic ) 
+- Services Handler ( Service Provider )
+- Register service by Current Assembly
+
+- Authen
+- Requests Handler ( Http Request ) 
+- indexer 
+- Aggregation ( LinQMethod )
+- Indexer 

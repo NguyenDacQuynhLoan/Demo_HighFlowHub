@@ -1,0 +1,131 @@
+﻿# Binaries
+bin/
+obj/
+
+# Visual Studio files
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# Rider files
+.idea/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.suo
+*.suo.ide
+
+# Test Results
+[Tt]est[Rr]esult*/
+*.testsettings
+!.github/workflows/ci.yml
+
+# Resharper
+_ReSharper*/
+*.sln.docstates
+
+# NuGet
+*.nuget.props
+*.paket/paket.exe
+paket-files/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.suo
+*.suo.ide
+
+# Package files
+*.nupkg
+*.pupkg
+*.snupkg
+**/bin/
+**/node_modules/
+
+# Log files
+logs/
+*.log
+*.log.*
+
+# OS generated files
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Visual Studio Code
+.vscode/
+.vscode-test/
+
+# Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.suo
+*.suo.ide
+
+# Test Results
+[Tt]est[Rr]esult*/
+*.testsettings
+!.github/workflows/ci.yml
+
+# Resharper
+_ReSharper*/
+*.sln.docstates
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.suo
+*.suo.ide
+
+# Test Results
+[Tt]est[Rr]esult*/
+*.testsettings
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk

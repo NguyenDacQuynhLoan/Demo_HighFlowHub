@@ -16,8 +16,6 @@ builder.Services.AddRedisCache(option =>
     {
         option.Configuration = builder.Configuration["RedisCache:Connection"];
         option.InstanceName = builder.Configuration["RedisCache:InstanceName"];
-        // option.Configuration = "localhost:6379,abortConnect=false,connectTimeout=30000,responseTimeout=30000";
-        // option.InstanceName = "RedisCacheDB";
     }
 );
 
@@ -26,7 +24,7 @@ var serviceAssembly = Assembly.GetExecutingAssembly();
 if (serviceAssembly != null)
 {
     var serviceTypes = serviceAssembly.ExportedTypes.Where(e 
-        => e.IsClass && e.Namespace == "HighFlowHub.Services"
+        => e is { IsClass: true, Namespace: "HighFlowHub.Services" }
     );
     foreach (var service in serviceTypes)
     {
@@ -36,9 +34,6 @@ if (serviceAssembly != null)
             {
                 continue;
             }
-
-            //var serviceInterface = service.GetInterface($"I{service.Name}");
-            //if (serviceInterface != null){}
             builder.Services.AddScoped(service);
         }
     }

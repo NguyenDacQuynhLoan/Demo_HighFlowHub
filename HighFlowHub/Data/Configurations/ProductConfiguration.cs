@@ -4,13 +4,14 @@
 //
 // History
 // ------------------------------------------------------------------------------------------
-// Date         Author      
+// Date         Author          EditDate    EditBy
 // ------------------------------------------------------------------------------------------
-// 2023.10.23   Loan   
+// 2023.11.1   Loan            2023.11.1    Loan    
 // ==========================================================================================
 //
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using HighFlowHub.Entites;
 
 namespace HighFlowHub.Configurations

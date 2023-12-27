@@ -4,15 +4,16 @@
 //
 // History
 // ------------------------------------------------------------------------------------------
-// Date         Author      
+// Date         Author          EditDate    EditBy
 // ------------------------------------------------------------------------------------------
-// 2023.10.23   Loan   
+// 2023.11.1   Loan            2023.12.27    Loan    
 // ==========================================================================================
 //
 
 using Microsoft.AspNetCore.Mvc;
 using HighFlowHub.Models;
 using HighFlowHub.Services;
+using HighFlowHub.Services.Caches;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using RedisCache.Core;
@@ -28,20 +29,26 @@ namespace HighFlowHub.Controllers
     [ApiController]
     public class ProductController : BaseController<ProductModel, ProductEntity, ProductServices>
     {
-        private IDistributedCache _redis;
-
-        private ProductServices _productServices;
+        // private readonly IDistributedCache _redis;
+        
+        private IRedisCache _caches;
+        private IMessageProvider _messageProvider;
 
         /// <summary>
         ///  Constructor
         /// </summary>
         /// <param name="productServices">Product Services</param>
-        /// <param name="supplierServices">Suppliers Services</param>
-        public ProductController(ProductServices productServices, IDistributedCache redisServices) : base(
+        /// <param name="redisServices">Suppliers Services</param>
+        /// <param name="messageProvider"></param>
+        public ProductController(
+            ProductServices productServices, 
+            IDistributedCache redisServices,
+            IMessageProvider messageProvider            
+        ) : base(
             productServices)
         {
-            _productServices = productServices;
-            _redis = redisServices;
+            // _redis = redisServices;
+            _messageProvider = messageProvider;
         }
 
         /// <summary>
@@ -53,7 +60,8 @@ namespace HighFlowHub.Controllers
         {
             try
             {
-                var productsRedis = await _redis.GetStringAsync("product-list");
+                // var productsRedis = await _redis.GetStringAsync("product-list");
+                var productsRedis = await _caches.GetCache<List<ProductModel>>("product-list");
                 if (productsRedis is null)
                 {
                     // Get and validate product
@@ -61,12 +69,13 @@ namespace HighFlowHub.Controllers
                     var productList = productsApi.ToList();
 
                     // Set data to cache
-                    await _redis.SetStringAsync("product-list", JsonConvert.SerializeObject(productList));
+                    await _caches.CreateCacheByString("product-list", productList);
+                    // await _redis.SetStringAsync("product-list", JsonConvert.SerializeObject(productList));
 
                     return Ok(productList);
                 }
 
-                return Ok(JsonConvert.DeserializeObject<List<ProductModel>>(productsRedis));
+                return Ok(productsRedis);
             }
             catch (Exception e)
             {
@@ -93,10 +102,14 @@ namespace HighFlowHub.Controllers
                 var productsApi = await GetAsync();
 
                 // Update in Redis
-                await _redis.SetStringAsync(
+                await _caches.CreateCacheByString(
                     CacheList.ProductList,
                     JsonConvert.SerializeObject(productsApi.ToList())
                 );
+                // await _redis.SetStringAsync(
+                //     CacheList.ProductList,
+                //     JsonConvert.SerializeObject(productsApi.ToList())
+                // );
 
                 return Ok(updatedProduct);
             }
@@ -121,14 +134,15 @@ namespace HighFlowHub.Controllers
 
                 // Create new product
                 var createdProduct = await CreateAsync(model);
-
-                var productsApi = await GetAsync();
+                
                 // Store new product
-                await _redis.SetStringAsync(
+                var productsApi = await GetAsync();
+                await _caches.CreateCacheByString(
                     CacheList.ProductList,
-                    JsonConvert.SerializeObject(productsApi.ToList())
+                    productsApi.ToList()
                 );
-
+                _messageProvider.SendMessage(createdProduct);
+                
                 return Ok(createdProduct);
             }
             catch (Exception e)
@@ -150,13 +164,18 @@ namespace HighFlowHub.Controllers
             if (result)
             {
                 // Redis Remove item in Product list
-                var productsRedis = await _redis.GetStringAsync("product-list");
-                var productList = JsonConvert.DeserializeObject<List<ProductModel>>(productsRedis);
-
-                productList.Remove(productList.FirstOrDefault(e => e.Id.Equals(id)));
+                var productsRedis = await _caches.GetCache<List<ProductModel>>(CacheList.ProductList);
+                if (productsRedis == null)
+                {
+                    return false;
+                }
+                productsRedis.Remove(productsRedis.FirstOrDefault(e => e.Id.Equals(id)));
 
                 // Update item
-                await _redis.SetStringAsync(CacheList.ProductList, JsonConvert.SerializeObject(productList));
+                await _caches.CreateCacheByString(
+                    CacheList.ProductList,
+                    productsRedis
+                );
             }
             return result;
         }

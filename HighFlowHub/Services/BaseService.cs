@@ -4,12 +4,13 @@
 //
 // History
 // ------------------------------------------------------------------------------------------
-// Date         Author      
+// Date         Author          EditDate    EditBy
 // ------------------------------------------------------------------------------------------
-// 2023.10.23   Loan   
+// 2023.11.1   Loan            2023.12.27    Loan    
 // ==========================================================================================
 //
 using System.Linq.Expressions;
+
 using HighFlowHub.Entites;
 using HighFlowHub.Repositories;
 
@@ -24,20 +25,17 @@ namespace HighFlowHub.Services
     /// <typeparam name="TEntity">Entity</typeparam>
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity
     {
-        public IServiceProvider _serviceProvider;
-        
         private BaseRepository<TEntity> _repository { get;}
 
         /// <summary>
         ///  Constructor
         /// </summary>
-        /// <param name="provider">Service Provider</param>
         /// <param name="context">DB Context</param>
         protected BaseService (DBContext context)
         {
             _repository = new BaseRepository<TEntity>(context);
         }
-
+  
         /// <summary>
         ///  Get All Items
         /// </summary>
@@ -70,10 +68,10 @@ namespace HighFlowHub.Services
         }
         
         /// <summary>
-        /// 
+        ///  Update Product
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">Entity</param>
+        /// <returns>Updated Entity</returns>
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             return await _repository.UpdateAsync(entity);

@@ -8,39 +8,38 @@ using RedisCache.Core;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DBContext>(e =>
-    e.UseSqlServer(builder.Configuration.GetConnectionString("WebApiDatabase"))
+    e.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
 );
+
 
 // Register Redis Cache
 builder.Services.AddRedisCache(option =>
     {
         option.Configuration = builder.Configuration["RedisCache:Connection"];
-        option.InstanceName = builder.Configuration["RedisCache:InstanceName"];
-        // option.Configuration = "localhost:6379,abortConnect=false,connectTimeout=30000,responseTimeout=30000";
-        // option.InstanceName = "RedisCacheDB";
+        option.InstanceName  = builder.Configuration["RedisCache:InstanceName"];
     }
 );
 
+// Register RabbitMQ Message Provider 
+builder.Services.AddScoped<IMessageProvider, RabbitMqService>();
+
 // Register services
 var serviceAssembly = Assembly.GetExecutingAssembly();
-if (serviceAssembly != null)
+if (serviceAssembly is not null)
 {
     var serviceTypes = serviceAssembly.ExportedTypes.Where(e 
         => e.IsClass && e.Namespace == "HighFlowHub.Services"
     );
     foreach (var service in serviceTypes)
     {
-        if(service != null)
+        if (service.Name.Contains("BaseService"))
         {
-            if (service.Name.Contains("BaseService"))
-            {
-                continue;
-            }
-
-            //var serviceInterface = service.GetInterface($"I{service.Name}");
-            //if (serviceInterface != null){}
-            builder.Services.AddScoped(service);
+            continue;
         }
+
+        //var serviceInterface = service.GetInterface($"I{service.Name}");
+        //if (serviceInterface != null){}
+        builder.Services.AddScoped(service);
     }
 }
 

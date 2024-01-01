@@ -1,14 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using HighFlowHub;
 using System.Reflection;
-using HighFlowHub.Services;
 using RedisCache.Core;
 
 // Connect DB
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DBContext>(e =>
-    e.UseSqlServer(builder.Configuration.GetConnectionString("WebApiDatabase"))
+    e.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
 );
 
 // Register Redis Cache

@@ -29,5 +29,12 @@ namespace HighFlowHub.Entites
         public bool IsDiscount { get; set; }
 
         public decimal? DiscountPercent { get; set; }
+        
+        public ICollection<OrderDetailRel> OrderDetailRel { get; set; }
+        
+        public Product ()
+        {
+            this.OrderDetailRel = new HashSet<OrderDetailRel>( );
+        }
     }
 }

@@ -6,26 +6,20 @@
 // ------------------------------------------------------------------------------------------
 // Date         Author      
 // ------------------------------------------------------------------------------------------
-// 2023.10.23   Loan   
+// 2024.1.2     Loan   
 // ==========================================================================================
 //
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using HighFlowHub.Entites;
-
-namespace HighFlowHub.Configurations
+namespace HighFlowHub.Models
 {
     /// <summary>
-    ///  Product Configuration
+    ///  Order Model
     /// </summary>
-    public class ProductConfiguration : BaseEntityConfiguration<Product>
+    public class Order : BaseModel
     {
-        public override void Configure (EntityTypeBuilder<Product> builder)
-        {
-            base.Configure (builder);   
-            
-            builder.ToTable("product_tbl");
-        }
+        public string OrderName { get; set; }
+
+        public string OrderCode { get; set; }
+
+        public string? Description { get; set; }
     }
 }

@@ -9,10 +9,10 @@
 // 2023.10.23   Loan   
 // ==========================================================================================
 //
-
-using HighFlowHub.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using HighFlowHub.Entites;
 
 namespace HighFlowHub.Configurations
 {

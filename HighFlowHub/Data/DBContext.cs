@@ -6,7 +6,7 @@
 // ------------------------------------------------------------------------------------------
 // Date         Author      
 // ------------------------------------------------------------------------------------------
-// 2023.10.23   Loan   
+// 2024.1.2     Loan   
 // ==========================================================================================
 //
 using Microsoft.EntityFrameworkCore;
@@ -40,5 +40,7 @@ namespace HighFlowHub
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Categories { get; set; }
+        public DbSet<OrderDetailRel> OrderDetailRels { get; set; }
     }
 }

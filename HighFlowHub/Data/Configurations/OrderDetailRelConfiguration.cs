@@ -6,7 +6,7 @@
 // ------------------------------------------------------------------------------------------
 // Date         Author      
 // ------------------------------------------------------------------------------------------
-// 2023.10.23   Loan   
+// 2024.1.2     Loan   
 // ==========================================================================================
 //
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +17,25 @@ using HighFlowHub.Entites;
 namespace HighFlowHub.Configurations
 {
     /// <summary>
-    ///  Product Configuration
+    ///  Order Detail Configuration
     /// </summary>
-    public class ProductConfiguration : BaseEntityConfiguration<Product>
+    public class OrderDetailRelConfiguration : BaseEntityConfiguration<OrderDetailRel>
     {
-        public override void Configure (EntityTypeBuilder<Product> builder)
+        public override void Configure(EntityTypeBuilder<OrderDetailRel> builder)
         {
-            base.Configure (builder);   
-            
-            builder.ToTable("product_tbl");
+            base.Configure(builder);
+
+            builder.ToTable("order_prod_rel");
+
+            builder.HasKey(e => new { e.ProductId, e.OrderId });
+
+            builder.HasOne(e => e.Product)
+                .WithMany(e => e.OrderDetailRel)
+                .HasForeignKey(e => e.ProductId);
+
+            builder.HasOne(e => e.Order)
+                .WithMany(e => e.OrderDetailRel)
+                .HasForeignKey(e => e.OrderId);
         }
     }
 }

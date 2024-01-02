@@ -9,23 +9,24 @@
 // 2023.10.23   Loan   
 // ==========================================================================================
 //
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using HighFlowHub.Entites;
-
-namespace HighFlowHub.Configurations
+namespace HighFlowHub.Entites
 {
     /// <summary>
-    ///  Product Configuration
+    ///  Order Entity
     /// </summary>
-    public class ProductConfiguration : BaseEntityConfiguration<Product>
+    public class Order : BaseEntity
     {
-        public override void Configure (EntityTypeBuilder<Product> builder)
+        public string OrderName { get; set; }
+
+        public string OrderCode { get; set; }
+
+        public string? Description { get; set; }
+
+        public ICollection<OrderDetailRel> OrderDetailRel { get; set; }
+
+        public Order ()
         {
-            base.Configure (builder);   
-            
-            builder.ToTable("product_tbl");
+            this.OrderDetailRel = new HashSet<OrderDetailRel>( );
         }
     }
 }
